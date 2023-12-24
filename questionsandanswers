@@ -1,0 +1,40 @@
+--Average length of song, max, shortest
+SELECT AVG(length) AS AVGLENGTH, MAX(length) MAXLENGTH, MIN(length) MINLENGTH
+FROM Top2019;
+
+--What genres and what are the most common genre type
+SELECT DISTINCT COUNT(Genre) AS GenreCount, Genre
+FROM Top2019
+GROUP BY Genre
+ORDER BY GenreCount DESC;
+
+--Calculate the average popularity for the artists in the Spotify data table
+SELECT AVG(Popularity) AS AVGPOP, MAX(Popularity) AS MAXPOP, MIN(Popularity) AS MINPOP
+FROM Top2019;
+
+--every artist with an popularity of 90 or above, show their name, their average popularity, and label them as a “Top Star.”
+SELECT Popularity, Artist_Name, 'Top Star' AS tag, Track_Name
+FROM Top2019
+WHERE Popularity >= 90
+ORDER BY Popularity DESC;
+
+--Creating a new column called Top Star in Text format
+ALTER TABLE Top2019
+ADD COLUMN 'Top Star' TEXT;
+
+--Setting the entire column named NOT Top Star
+UPDATE Top2019
+SET 'Top Star' = ' NOT Top Star';
+
+--every artist with an popularity of 90 or above and label them as a “Top Star.”, regardless of whether their other songs are below 90 popularity
+UPDATE Top2019
+SET 'Top Star' = ' Top Star'
+WHERE  Popularity >= 90 OR Artist_Name IN ('Billie Eilish', 'Post Malone', 'Bad Bunny', 'Anuel AA', 'Lil Tecca', 'Drake',
+'Lizzo', 'MEDUZA', 'Lil Nas X', 'Lunay', 'Daddy Yankee', 'Sech', 'Sam Smith',
+'J Balvin', 'Taylor Swift');
+
+--Are there any duplicates artisits in top 50?
+SELECT Artist_Name, COUNT(Artist_Name) AS name_count
+FROM Top2019
+GROUP BY Artist_Name
+HAVING COUNT(Artist_Name) > 1;
